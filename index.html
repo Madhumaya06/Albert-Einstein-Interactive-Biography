@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="An interactive biography of Albert Einstein — his life, journey, theories, ideas, personality and thoughts.">
+  <title>Albert Einstein — Life, Journey & Theories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--gold:#d4a574;--gold-light:#e6c79e;--ink:#0a0a0f;--ink-2:#131318;--ink-3:#1c1c24;--muted:#9a9aa5;}
+    *{box-sizing:border-box;scroll-behavior:smooth}
+    body{margin:0;background:var(--ink);color:#e8e8ea;font-family:Inter,Arial,sans-serif;overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:160px 160px;z-index:-1}
+    .serif{font-family:"Cormorant Garamond",Georgia,serif}
+    .gold{background:linear-gradient(135deg,#d4a574,#e6c79e 45%,#b8864e 70%,#d4a574);background-size:200% auto;color:transparent;-webkit-background-clip:text;background-clip:text;animation:shine 6s linear infinite}
+    .wrap{width:min(1160px,calc(100% - 40px));margin:auto}
+    .section{padding:110px 0;position:relative}
+    .section-head{text-align:center;margin-bottom:56px}
+    .eyebrow{color:var(--gold);font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:15px}
+    .section h2{font:300 clamp(48px,7vw,76px)/.95 "Cormorant Garamond",serif;margin:0 0 18px;color:#fff}
+    .section-head p{max-width:650px;margin:auto;color:var(--muted);font-size:16px;line-height:1.8;font-weight:300}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,#d4a57488,transparent)}
+
+    nav{position:fixed;z-index:20;top:0;left:0;right:0;padding:20px 0;transition:.35s}
+    nav.scrolled{padding:12px 0;background:#0a0a0fee;backdrop-filter:blur(18px);border-bottom:1px solid #d4a57422}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between}
+    .brand{border:0;background:none;color:var(--gold);font:italic 26px "Cormorant Garamond",serif;cursor:pointer}
+    .links{display:flex;gap:27px}
+    .links button{background:none;border:0;color:#bbbcc4;font:400 12px Inter;cursor:pointer;position:relative;padding:6px 0}
+    .links button:after{content:"";height:2px;width:0;background:var(--gold);position:absolute;bottom:0;left:0;transition:.3s}
+    .links button:hover,.links button.active{color:var(--gold)}
+    .links button:hover:after,.links button.active:after{width:100%}
+    .menu{display:none;background:none;border:1px solid #d4a57455;color:var(--gold);padding:8px 12px;border-radius:8px;font-size:18px}
+
+    #hero{min-height:100vh;display:grid;place-items:center;position:relative;overflow:hidden;padding:100px 0 55px;background:radial-gradient(ellipse at 70% 35%,#182432aa,transparent 48%)}
+    #hero:after{content:"";position:absolute;width:780px;height:780px;border:1px solid #d4a57415;border-radius:50%;right:-230px;top:8%;animation:orbit 38s linear infinite;pointer-events:none}
+    .hero-grid{display:grid;grid-template-columns:1.04fr .96fr;align-items:center;gap:60px;position:relative;z-index:1}
+    .pill{display:inline-flex;gap:9px;align-items:center;border:1px solid #d4a57444;border-radius:99px;padding:8px 14px;color:var(--gold);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+    .hero h1{font:300 clamp(74px,11vw,132px)/.82 "Cormorant Garamond",serif;margin:25px 0 25px}
+    .hero-copy{max-width:520px;color:#b3b3bd;font-size:18px;line-height:1.75;font-weight:300}
+    .facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+    .fact{padding:11px 14px;border:1px solid #ffffff18;background:#ffffff08;border-radius:9px}
+    .fact small{display:block;color:#777884;text-transform:uppercase;letter-spacing:.1em;font-size:9px}
+    .fact b{font:18px "Cormorant Garamond",serif;color:var(--gold)}
+    .portrait-wrap{width:min(410px,80vw);aspect-ratio:1;margin:auto;position:relative;animation:float 6s ease-in-out infinite}
+    .portrait-wrap:before{content:"";position:absolute;inset:-20px;border-radius:50%;background:#d4a57422;filter:blur(30px);animation:pulse 4s ease-in-out infinite}
+    .portrait{width:100%;height:100%;object-fit:cover;border-radius:50%;border:2px solid #d4a57488;position:relative;z-index:1;box-shadow:0 0 55px #d4a57430}
+    .date{position:absolute;z-index:2;right:-8px;bottom:8px;padding:10px 16px;border-radius:10px;background:#0a0a0fee;border:1px solid #d4a57444;color:var(--gold);font:italic 17px "Cormorant Garamond",serif}
+    .scroll{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);color:#74747e;text-transform:uppercase;letter-spacing:.2em;font-size:10px;text-align:center}
+    .scroll span{display:block;color:var(--gold);font-size:18px;margin-top:8px;animation:bounce 1.8s infinite}
+
+    .card{background:#1c1c2499;border:1px solid #d4a5741c;border-radius:18px;backdrop-filter:blur(14px);transition:.35s}
+    .card:hover{transform:translateY(-5px);border-color:#d4a57466;box-shadow:0 20px 50px #0008}
+    .glance{padding:30px;margin-bottom:65px}
+    .glance h3{font:26px "Cormorant Garamond",serif;margin:0 0 22px;color:#fff}
+    .facts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+    .bio-fact{border-bottom:1px solid #ffffff12;padding-bottom:12px}
+    .bio-fact small{display:block;color:#777884;text-transform:uppercase;letter-spacing:.1em;font-size:9px;margin-bottom:5px}
+    .bio-fact span{font-size:13px;line-height:1.55;color:#ddd;font-weight:300}
+    .chapters{display:grid;gap:22px}
+    .chapter{display:grid;grid-template-columns:160px 1fr;gap:35px;align-items:start}
+    .chapter:nth-child(even){grid-template-columns:1fr 160px}
+    .chapter:nth-child(even) .chapter-card{grid-column:1;grid-row:1}
+    .chapter:nth-child(even) .chapter-meta{grid-column:2;grid-row:1;text-align:right}
+    .chapter-meta strong{display:block;color:#ffffff16;font:72px "Cormorant Garamond",serif;line-height:.8}
+    .chapter-meta span{display:block;color:var(--gold);font-size:12px;margin-top:12px}
+    .chapter-card{padding:26px}
+    .chapter-card h3{font:27px "Cormorant Garamond",serif;margin:0 0 10px;color:#fff}
+    .chapter-card p,.theory-copy p{color:#c2c2ca;font-size:14px;line-height:1.85;font-weight:300;margin:0}
+
+    .timeline{position:relative;max-width:900px;margin:auto}
+    .timeline:before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(transparent,#d4a57488 10%,#d4a57488 90%,transparent)}
+    .event{display:flex;width:50%;padding:0 42px 24px 0;position:relative}
+    .event:nth-child(even){margin-left:50%;padding:0 0 24px 42px}
+    .event:after{content:"";position:absolute;right:-7px;top:25px;width:13px;height:13px;background:var(--gold);border-radius:50%;border:3px solid var(--ink);box-shadow:0 0 18px #d4a57488}
+    .event:nth-child(even):after{right:auto;left:-7px}
+    .event-card{padding:21px}
+    .event-card strong{display:block;font:35px "Cormorant Garamond",serif;color:var(--gold)}
+    .event-card h3{margin:3px 0 7px;font-size:16px;color:white}
+    .event-card p{margin:0;color:#9c9ca6;font-size:13px;line-height:1.65}
+
+    .theory-layout{display:grid;grid-template-columns:320px 1fr;gap:24px}
+    .topics{display:grid;gap:9px}
+    .topic{padding:17px;border:1px solid #ffffff12;border-radius:12px;background:#ffffff04;color:#fff;text-align:left;cursor:pointer;transition:.3s}
+    .topic:hover,.topic.selected{border-color:#d4a57477;background:#d4a57412}
+    .topic strong{display:block;color:#fff;font:21px "Cormorant Garamond",serif}
+    .topic.selected strong{color:var(--gold)}
+    .topic small{color:#777884;font-size:11px}
+    .theory-panel{padding:32px;min-height:560px}
+    .theory-panel h3{font:35px "Cormorant Garamond",serif;color:#fff;margin:0 0 5px}
+    .theory-panel em{color:var(--gold);font-size:13px}
+    .theory-copy{margin-top:22px;border-top:1px solid #d4a57433;padding-top:20px;max-height:470px;overflow:auto}
+    .theory-copy p{margin:0 0 17px}
+
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .small-card{padding:22px}
+    .icon{width:44px;height:44px;border:1px solid #d4a57435;border-radius:11px;display:grid;place-items:center;color:var(--gold);font-size:22px;margin-bottom:15px}
+    .small-card h3{font:21px "Cormorant Garamond",serif;color:#fff;margin:0 0 9px}
+    .small-card p{color:#9999a4;line-height:1.7;font-size:13px;margin:0}
+    .image-band{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:45px}
+    .image-tile{height:170px;border-radius:16px;overflow:hidden;position:relative;background-size:cover;background-position:center;display:flex;align-items:end;padding:18px}
+    .image-tile:before{content:"";position:absolute;inset:0;background:linear-gradient(transparent,#0a0a0fee)}
+    .image-tile span{position:relative;font:italic 17px "Cormorant Garamond",serif;color:#e6c79e}
+    .quote-feature{padding:55px 65px;text-align:center;margin-bottom:34px;position:relative}
+    .quote-feature:before{content:"\201C";position:absolute;left:28px;top:4px;color:#d4a57455;font:100px Georgia,serif}
+    .quote-feature blockquote{margin:0 auto 18px;max-width:850px;font:italic 38px/1.25 "Cormorant Garamond",serif;color:white}
+    .quote-feature cite{color:var(--gold);font-size:12px}
+    .quote-controls{display:flex;justify-content:center;gap:8px;margin-top:23px}
+    .quote-controls button{border:1px solid #d4a57444;background:#ffffff05;color:var(--gold);border-radius:50%;width:34px;height:34px;cursor:pointer}
+    .quote-dots{display:flex;align-items:center;gap:5px}
+    .quote-dots button{width:6px;height:6px;border:0;padding:0;background:#d4a57444}
+    .quote-dots button.active{width:22px;border-radius:5px;background:var(--gold)}
+    .quote-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+    .quote-card{padding:19px}
+    .quote-card p{font:italic 17px/1.45 "Cormorant Garamond",serif;color:#ddd;margin:0 0 9px}
+    .quote-card small{color:#d4a57499;font-size:10px}
+
+    footer{padding:90px 0 28px;text-align:center}
+    footer .closing{padding:75px 25px;border-radius:24px;background:radial-gradient(ellipse at center,#1d2430,#0a0a0f 70%);border:1px solid #d4a57420}
+    footer blockquote{font:italic clamp(24px,4vw,40px)/1.25 "Cormorant Garamond",serif;max-width:850px;margin:0 auto 18px;color:#fff}
+    footer p{color:#777884;font-size:12px}
+    .footer-line{margin:45px 0 25px}
+
+    .reveal{opacity:0;transform:translateY(25px);transition:.8s cubic-bezier(.22,1,.36,1)}
+    .reveal.visible{opacity:1;transform:none}
+    @keyframes float{50%{transform:translateY(-17px) rotate(1deg)}}
+    @keyframes pulse{50%{box-shadow:0 0 65px #d4a57455}}
+    @keyframes orbit{to{transform:rotate(360deg)}}
+    @keyframes shine{to{background-position:200% center}}
+    @keyframes bounce{50%{transform:translateY(6px)}}
+
+    @media(max-width:900px){
+      .hero-grid{grid-template-columns:1fr;text-align:center}
+      .hero-copy{margin:auto}
+      .facts{justify-content:center}
+      .portrait-wrap{width:330px}
+      .links{gap:15px}
+      .grid-4{grid-template-columns:repeat(2,1fr)}
+      .theory-layout{grid-template-columns:1fr}
+      .topics{grid-template-columns:repeat(2,1fr)}
+      .topic strong{font-size:18px}
+      .facts-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:640px){
+      .wrap{width:min(100% - 28px,1160px)}
+      .section{padding:78px 0}
+      .links{display:none;position:absolute;left:0;right:0;top:65px;background:#0a0a0ff5;padding:15px 20px;border-bottom:1px solid #d4a57422}
+      .links.open{display:grid;gap:2px}
+      .links button{text-align:left;padding:11px 0}
+      .menu{display:block}
+      .hero h1{font-size:80px}
+      .portrait-wrap{width:270px}
+      .facts-grid,.grid-4,.quote-grid,.image-band{grid-template-columns:1fr}
+      .chapter,.chapter:nth-child(even){display:flex;flex-direction:column;gap:11px}
+      .chapter:nth-child(even) .chapter-card,.chapter:nth-child(even) .chapter-meta{order:initial}
+      .chapter-meta,.chapter:nth-child(even) .chapter-meta{text-align:left}
+      .chapter-meta strong{font-size:50px}
+      .timeline:before{left:11px}
+      .event,.event:nth-child(even){width:100%;margin:0;padding:0 0 20px 38px}
+      .event:after,.event:nth-child(even):after{left:5px;right:auto}
+      .theory-panel{padding:22px}
+      .topics{grid-template-columns:1fr}
+      .quote-feature{padding:45px 22px}
+      .quote-feature blockquote{font-size:29px}
+      .scroll{display:none}
+    }
+  </style>
+</head>
+<body>
+  <nav id="nav">
+    <div class="wrap nav-inner">
+      <button class="brand" data-scroll="hero">A. Einstein</button>
+      <div class="links" id="links">
+        <button data-scroll="hero">Home</button>
+        <button data-scroll="life">Life</button>
+        <button data-scroll="journey">Journey</button>
+        <button data-scroll="theory">Theories</button>
+        <button data-scroll="ideas">Ideas</button>
+        <button data-scroll="personality">Personality</button>
+        <button data-scroll="thoughts">Thoughts</button>
+      </div>
+      <button class="menu" id="menu">☰</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- HERO -->
+    <section id="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="pill">✦ A life in physics</div>
+          <h1><span class="gold">Albert</span><br>Einstein</h1>
+          <p class="hero-copy">The man who reimagined space, time, and the universe itself. Explore his life, his journey, his theories, and the mind that changed everything.</p>
+          <div class="facts">
+            <div class="fact"><small>Born</small><b>1879</b></div>
+            <div class="fact"><small>Nobel Prize</small><b>1921</b></div>
+            <div class="fact"><small>Relativity</small><b>1915</b></div>
+            <div class="fact"><small>Died</small><b>1955</b></div>
+          </div>
+        </div>
+        <div>
+          <div class="portrait-wrap">
+            <img class="portrait" src="photo.jpeg" alt="Albert Einstein">
+            <div class="date">1879 — 1955</div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll">Scroll to explore<span>⌄</span></div>
+    </section>
+
+    <!-- LIFE -->
+    <section class="section" id="life">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="eyebrow">Biography</div>
+          <h2>The <span class="gold">Life</span></h2>
+          <p>From a quiet, questioning child in Ulm to the most influential physicist of the modern age — the full arc of a remarkable life.</p>
+        </div>
+        <div class="card glance reveal">
+          <h3>At a Glance</h3>
+          <div class="facts-grid">
+            <div class="bio-fact"><small>Full Name</small><span>Albert Einstein</span></div>
+            <div class="bio-fact"><small>Born</small><span>March 14, 1879 — Ulm, Germany</span></div>
+            <div class="bio-fact"><small>Died</small><span>April 18, 1955 — Princeton, USA</span></div>
+            <div class="bio-fact"><small>Education</small><span>Federal Polytechnic School, Zurich</span></div>
+            <div class="bio-fact"><small>Nobel Prize</small><span>Physics, 1921 — Photoelectric Effect</span></div>
+            <div class="bio-fact"><small>Famous Equation</small><span>E = mc², 1905</span></div>
+            <div class="bio-fact"><small>Citizenship</small><span>Swiss and American</span></div>
+            <div class="bio-fact"><small>Instrument</small><span>Violin, from age five</span></div>
+            <div class="bio-fact"><small>Children</small><span>Hans Albert, Eduard, and Lieserl</span></div>
+          </div>
+        </div>
+        <div class="chapters">
+          <article class="chapter reveal">
+            <div class="chapter-meta"><strong>01</strong><span>1879 – 1894</span></div>
+            <div class="card chapter-card">
+              <h3>Early Years in Ulm and Munich</h3>
+              <p>Albert Einstein was born on March 14, 1879, in Ulm, in the Kingdom of Württemberg. His father Hermann was a salesman and engineer; his mother Pauline introduced him to music. At age five, a pocket compass transfixed him: the needle moved, yet nothing touched it. This invisible force sparked a lifelong obsession with the hidden laws of nature. He taught himself geometry and calculus from textbooks and grew increasingly uncomfortable with the rigid, military style of his school.</p>
+            </div>
+          </article>
+          <article class="chapter reveal">
+            <div class="chapter-meta"><strong>02</strong><span>1896 – 1900</span></div>
+            <div class="card chapter-card">
+              <h3>The Polytechnic Years in Zurich</h3>
+              <p>After completing secondary school in Aarau, Einstein enrolled at the Federal Polytechnic School in Zurich. He was brilliant but unconventional, often skipping lectures to study theoretical physics on his own. At seventeen, he imagined riding alongside a beam of light — the seed of special relativity. He graduated in 1900, but his independence and impatience with professors cost him an academic position.</p>
+            </div>
+          </article>
+          <article class="chapter reveal">
+            <div class="chapter-meta"><strong>03</strong><span>1902 – 1909</span></div>
+            <div class="card chapter-card">
+              <h3>The Bern Patent Office</h3>
+              <p>Einstein found work as a technical expert at the Federal Patent Office in Bern. The humble job gave him a quiet desk, steady income, and time to think. In 1905, his annus mirabilis, he published four papers on the photoelectric effect, Brownian motion, special relativity, and mass-energy equivalence. He was twenty-six, a patent clerk with no academic affiliation, transforming physics forever.</p>
+            </div>
+          </article>
+          <article class="chapter reveal">
+            <div class="chapter-meta"><strong>04</strong><span>1914 – 1919</span></div>
+            <div class="card chapter-card">
+              <h3>General Relativity and World Fame</h3>
+              <p>In November 1915, Einstein presented the field equations of general relativity: gravity was not a Newtonian force, but the curvature of spacetime caused by mass and energy. In 1919, Arthur Eddington's eclipse expedition confirmed that starlight bent around the Sun as Einstein predicted. The theorist became an overnight global celebrity.</p>
+            </div>
+          </article>
+          <article class="chapter reveal">
+            <div class="chapter-meta"><strong>05</strong><span>1921 – 1932</span></div>
+            <div class="card chapter-card">
+              <h3>Nobel Prize and the Quantum Debate</h3>
+              <p>Einstein received the 1921 Nobel Prize in Physics for the photoelectric effect. He traveled the world, became a household name, and debated Niels Bohr over the meaning of quantum mechanics. Though one of quantum theory's founders, he never accepted its probabilistic nature: "God does not play dice." He spent the decade searching for a unified field theory.</p>
+            </div>
+          </article>
+          <article class="chapter reveal">
+            <div class="chapter-meta"><strong>06</strong><span>1933 – 1955</span></div>
+            <div class="card chapter-card">
+              <h3>Exile in America and Final Years</h3>
+              <p>When Hitler came to power, Einstein never returned to Germany. He settled at the Institute for Advanced Study in Princeton and became an American citizen in 1940. After Hiroshima, he advocated nuclear disarmament, civil rights, and world government. He continued his unified field quest until his death on April 18, 1955, at age seventy-six.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNEY -->
+    <section class="section" id="journey">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="eyebrow">Timeline</div>
+          <h2>The <span class="gold">Journey</span></h2>
+          <p>Every turning point — from the compass that sparked a child's wonder to the final days in Princeton.</p>
+        </div>
+        <div class="timeline">
+          <div class="event reveal"><div class="card event-card"><strong>1879</strong><h3>Birth in Ulm</h3><p>Born on March 14 to Hermann and Pauline Einstein.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1885</strong><h3>The Compass</h3><p>A pocket compass introduces young Albert to invisible forces.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1896</strong><h3>Aarau and the Light Beam</h3><p>Begins his first thought experiments about riding a beam of light.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1900</strong><h3>Graduation</h3><p>Receives his physics teaching diploma from ETH Zurich.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1905</strong><h3>The Miracle Year</h3><p>Publishes four papers that reshape modern physics.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1915</strong><h3>General Relativity</h3><p>Gravity becomes the geometry of spacetime.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1919</strong><h3>Eddington Eclipse</h3><p>Starlight bending confirms Einstein's prediction.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1921</strong><h3>Nobel Prize</h3><p>Awarded Physics Nobel for the photoelectric effect.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1933</strong><h3>Exile from Germany</h3><p>Settles at the Institute for Advanced Study in Princeton.</p></div></div>
+          <div class="event reveal"><div class="card event-card"><strong>1955</strong><h3>Death in Princeton</h3><p>Dies at age 76; his ashes are scattered privately.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THEORIES -->
+    <section class="section" id="theory">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="eyebrow">The Science</div>
+          <h2>The <span class="gold">Theories</span></h2>
+          <p>Select a topic to explore the ideas that reshaped our understanding of reality.</p>
+        </div>
+        <div class="theory-layout">
+          <div class="topics">
+            <button class="topic selected" data-topic="special"><strong>Special Relativity</strong><small>The death of absolute time, 1905</small></button>
+            <button class="topic" data-topic="general"><strong>General Relativity</strong><small>Gravity as spacetime, 1915</small></button>
+            <button class="topic" data-topic="photo"><strong>Photoelectric Effect</strong><small>Light as particles, 1905</small></button>
+            <button class="topic" data-topic="brownian"><strong>Brownian Motion</strong><small>Proof that atoms are real</small></button>
+            <button class="topic" data-topic="mass"><strong>Mass-Energy Equivalence</strong><small>E = mc²</small></button>
+            <button class="topic" data-topic="unified"><strong>Unified Field Theory</strong><small>The quest he never completed</small></button>
+          </div>
+          <div class="card theory-panel">
+            <h3 id="theory-title">Special Relativity</h3>
+            <em id="theory-subtitle">The death of absolute time, 1905</em>
+            <div class="theory-copy" id="theory-copy"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IDEAS -->
+    <section class="section" id="ideas">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="eyebrow">Innovation</div>
+          <h2>The <span class="gold">Ideas</span></h2>
+          <p>The revolutionary concepts Einstein brought into the world — each one a new way of seeing reality.</p>
+        </div>
+        <div class="grid-4">
+          <article class="card small-card reveal"><div class="icon">✦</div><h3>Thought Experiments</h3><p>His greatest tool was his own mind. Riding a beam of light and falling in an elevator became paths to relativity.</p></article>
+          <article class="card small-card reveal"><div class="icon">◉</div><h3>Spacetime as a Fabric</h3><p>Space and time became one flexible four-dimensional fabric that mass and energy can bend.</p></article>
+          <article class="card small-card reveal"><div class="icon">∞</div><h3>God Does Not Play Dice</h3><p>His debate with Bohr challenged the probabilistic interpretation of quantum mechanics.</p></article>
+          <article class="card small-card reveal"><div class="icon">☼</div><h3>Light's Dual Nature</h3><p>Einstein helped reveal that light behaves as both a wave and a particle.</p></article>
+          <article class="card small-card reveal"><div class="icon">↕</div><h3>Equivalence</h3><p>Gravity and acceleration are physically equivalent — the happiest thought of his life.</p></article>
+          <article class="card small-card reveal"><div class="icon">◌</div><h3>Cosmological Thinking</h3><p>He was among the first to apply relativity to the universe as a whole.</p></article>
+          <article class="card small-card reveal"><div class="icon">♡</div><h3>Pacifism and Responsibility</h3><p>He believed scientists must take responsibility for the consequences of discovery.</p></article>
+          <article class="card small-card reveal"><div class="icon">♫</div><h3>Music as Insight</h3><p>Einstein played violin throughout his life and often turned to music while thinking.</p></article>
+        </div>
+        <div class="image-band">
+          <div class="image-tile" style="background-image:url('https://images.pexels.com/photos/3845162/pexels-photo-3845162.jpeg?auto=compress&cs=tinysrgb&w=900')"><span>"Imagination is more important than knowledge."</span></div>
+          <div class="image-tile" style="background-image:url('https://images.pexels.com/photos/582490/pexels-photo-582490.jpeg?auto=compress&cs=tinysrgb&w=900')"><span>"Logic will get you from A to B."</span></div>
+          <div class="image-tile" style="background-image:url('https://images.pexels.com/photos/9480696/pexels-photo-9480696.jpeg?auto=compress&cs=tinysrgb&w=900')"><span>"The mysterious is the source of true art and science."</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PERSONALITY -->
+    <section class="section" id="personality">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="eyebrow">The Man</div>
+          <h2>The <span class="gold">Personality</span></h2>
+          <p>Beyond the equations: the character, temperament, and spirit of the man behind the science.</p>
+        </div>
+        <div class="grid-4">
+          <article class="card small-card reveal"><div class="icon">✧</div><h3>Rebellious</h3><p>He distrusted dogma of every kind and trusted independent judgment above consensus.</p></article>
+          <article class="card small-card reveal"><div class="icon">⌕</div><h3>Deeply Curious</h3><p>He called himself not exceptionally intelligent, but passionately curious.</p></article>
+          <article class="card small-card reveal"><div class="icon">◷</div><h3>Patient</h3><p>"I stay with problems longer." Decades of persistence shaped his greatest work.</p></article>
+          <article class="card small-card reveal"><div class="icon">❧</div><h3>Modest</h3><p>Despite world fame, he lived simply, wore rumpled clothes, and avoided status.</p></article>
+          <article class="card small-card reveal"><div class="icon">☺</div><h3>Humorous</h3><p>Warm, approachable, and playful, he never took his own celebrity too seriously.</p></article>
+          <article class="card small-card reveal"><div class="icon">◯</div><h3>A Loner by Choice</h3><p>His deepest intellectual life was lived in solitude, walks, and music.</p></article>
+          <article class="card small-card reveal"><div class="icon">♡</div><h3>Pacifist</h3><p>He spent his later life advocating disarmament, civil rights, and world government.</p></article>
+          <article class="card small-card reveal"><div class="icon">♧</div><h3>Romantic About Nature</h3><p>He felt awe before the order and mystery of the universe.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- THOUGHTS -->
+    <section class="section" id="thoughts">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="eyebrow">Wisdom</div>
+          <h2>The <span class="gold">Thoughts</span></h2>
+          <p>Words on life, curiosity, imagination, and the universe.</p>
+        </div>
+        <div class="card quote-feature reveal">
+          <blockquote id="featured-quote">"Imagination is more important than knowledge. For knowledge is limited, whereas imagination embraces the entire world."</blockquote>
+          <cite id="featured-context">— On creativity, 1929</cite>
+          <div class="quote-controls">
+            <button id="prev">‹</button>
+            <div class="quote-dots" id="dots"></div>
+            <button id="next">›</button>
+          </div>
+        </div>
+        <div class="quote-grid">
+          <article class="card quote-card reveal"><p>"Try not to become a man of success, but rather try to become a man of value."</p><small>— On purpose</small></article>
+          <article class="card quote-card reveal"><p>"The important thing is not to stop questioning."</p><small>— On curiosity</small></article>
+          <article class="card quote-card reveal"><p>"Anyone who has never made a mistake has never tried anything new."</p><small>— On failure</small></article>
+          <article class="card quote-card reveal"><p>"In the middle of difficulty lies opportunity."</p><small>— On adversity</small></article>
+          <article class="card quote-card reveal"><p>"Life is like riding a bicycle. To keep your balance, you must keep moving."</p><small>— Letter to his son</small></article>
+          <article class="card quote-card reveal"><p>"I have no special talent. I am only passionately curious."</p><small>— Self-reflection</small></article>
+          <article class="card quote-card reveal"><p>"Look deep into nature, and then you will understand everything better."</p><small>— On nature</small></article>
+          <article class="card quote-card reveal"><p>"Peace cannot be kept by force; it can only be achieved by understanding."</p><small>— On peace</small></article>
+          <article class="card quote-card reveal"><p>"Logic will get you from A to B. Imagination will take you everywhere."</p><small>— On imagination</small></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="closing">
+        <blockquote>"The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking."</blockquote>
+        <p>Albert Einstein, 1879—1955</p>
+      </div>
+      <div class="divider footer-line"></div>
+      <p class="serif" style="color:#d4a574;font-size:20px">A. Einstein</p>
+      <p>A tribute to the life, journey, theories, ideas, personality, and thoughts of one of history's greatest minds.</p>
+    </div>
+  </footer>
+
+  <script>
+    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+    const nav=$('#nav'), links=$('#links');
+    $$('[data-scroll]').forEach(button=>button.addEventListener('click',()=>{
+      document.getElementById(button.dataset.scroll)?.scrollIntoView({behavior:'smooth'});
+      links.classList.remove('open');
+    }));
+    $('#menu').addEventListener('click',()=>links.classList.toggle('open'));
+    window.addEventListener('scroll',()=>{
+      nav.classList.toggle('scrolled',scrollY>50);
+      let current='hero';
+      ['hero','life','journey','theory','ideas','personality','thoughts'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el&&scrollY+150>=el.offsetTop) current=id;
+      });
+      $$('[data-scroll]').forEach(b=>b.classList.toggle('active',b.dataset.scroll===current));
+    });
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    }),{threshold:.1});
+    $$('.reveal').forEach(el=>observer.observe(el));
+
+    const theories={
+      special:['Special Relativity','The death of absolute time, 1905',[
+        'Before Einstein, physicists believed time was absolute — it ticked at the same rate everywhere. Space and time were the fixed stage on which events unfolded.',
+        'Einstein built special relativity on two postulates: the laws of physics are identical for all observers moving at constant velocity, and the speed of light in a vacuum is the same for every observer.',
+        'From these simple ideas came time dilation, length contraction, and the relativity of simultaneity. Two events that appear simultaneous to one observer may happen at different times for another.',
+        'E = mc² also emerged from this framework. Mass and energy are interchangeable; mass is a form of stored energy. Special relativity applies to constant motion, while gravity and acceleration require general relativity.'
+      ]],
+      general:['General Relativity','Gravity as the geometry of spacetime, 1915',[
+        'Einstein realized that a person in a sealed chamber cannot distinguish between standing in gravity and being pushed by acceleration. He called this the happiest thought of his life.',
+        'Gravity is not a Newtonian force. Mass and energy curve spacetime, and objects follow the straightest possible paths through that curved geometry. Matter tells spacetime how to curve; spacetime tells matter how to move.',
+        'The theory predicted Mercury\u2019s orbit, the bending of light, gravitational time dilation, black holes, an expanding universe, and gravitational waves — confirmed by LIGO exactly one hundred years after publication.'
+      ]],
+      photo:['The Photoelectric Effect','Light as particles, 1905 — the work that won the Nobel',[
+        'Einstein proposed that light comes in discrete packets of energy called photons. Each photon carries energy proportional to frequency: E = hf.',
+        'An electron leaves a metal only when one photon has enough energy to overcome its binding. Brighter light adds more photons, while higher frequency adds more energy to each photon.',
+        'This work was the foundation of quantum theory and won Einstein the 1921 Nobel Prize. It powers solar panels, digital camera sensors, and night vision.'
+      ]],
+      brownian:['Brownian Motion','The proof that atoms are real, 1905',[
+        'Pollen grains in water move randomly because invisible water molecules bombard them from every direction. Einstein explained this motion mathematically in 1905.',
+        'His predictions were confirmed by Jean Perrin in 1908, providing convincing evidence that atoms were physically real — not merely useful mathematical ideas.'
+      ]],
+      mass:['Mass-Energy Equivalence','E = mc², the most famous equation',[
+        'E = mc² states that energy equals mass multiplied by the speed of light squared. Since c² is enormous, even a tiny amount of mass contains vast energy.',
+        'The equation explains how the Sun shines: hydrogen fuses into helium and the missing mass becomes energy. It also underlies nuclear power, particle physics, and nuclear medicine.'
+      ]],
+      unified:['The Unified Field Theory','The quest he never completed, 1920–1955',[
+        'For the last thirty years of his life, Einstein searched for one mathematical framework uniting gravity and electromagnetism. He believed the complexity of nature hid a deeper simplicity.',
+        'He never succeeded, partly because physics was moving toward quantum mechanics and the strong and weak nuclear forces. Yet the dream of a single theory describing all physics remains one of science\u2019s greatest goals.'
+      ]]
+    };
+    function renderTheory(key){
+      const t=theories[key];
+      $('#theory-title').textContent=t[0];
+      $('#theory-subtitle').textContent=t[1];
+      $('#theory-copy').innerHTML=t[2].map(p=>`<p>${p}</p>`).join('');
+    }
+    renderTheory('special');
+    $$('.topic').forEach(btn=>btn.addEventListener('click',()=>{
+      $$('.topic').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      renderTheory(btn.dataset.topic);
+    }));
+
+    const quotes=[
+      ['Imagination is more important than knowledge. For knowledge is limited, whereas imagination embraces the entire world.','On creativity, 1929'],
+      ['The important thing is not to stop questioning. Curiosity has its own reason for existing.','On curiosity'],
+      ['In the middle of difficulty lies opportunity.','On adversity'],
+      ['Life is like riding a bicycle. To keep your balance, you must keep moving.','Letter to his son, 1930'],
+      ['I have no special talent. I am only passionately curious.','Self-reflection'],
+      ['Peace cannot be kept by force; it can only be achieved by understanding.','On peace']
+    ];
+    let qi=0;
+    const dots=$('#dots');
+    quotes.forEach((_,i)=>{
+      const b=document.createElement('button');
+      b.addEventListener('click',()=>showQuote(i));
+      dots.appendChild(b);
+    });
+    function showQuote(i){
+      qi=(i+quotes.length)%quotes.length;
+      $('#featured-quote').textContent='\u201C'+quotes[qi][0]+'\u201D';
+      $('#featured-context').textContent='— '+quotes[qi][1];
+      $$('#dots button').forEach((b,n)=>b.classList.toggle('active',n===qi));
+    }
+    showQuote(0);
+    $('#prev').addEventListener('click',()=>showQuote(qi-1));
+    $('#next').addEventListener('click',()=>showQuote(qi+1));
+    setInterval(()=>showQuote(qi+1),8000);
+  </script>
+</body>
+</html>
